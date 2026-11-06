@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Friendship Museum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fdeedd;--peach:#f8c6a2;--coral:#ef6a4c;--amber:#f5a43a;--teal:#12372f;--brass:#c8963a;--ink:#2b1d17;--card:#fff9f1;--line:rgba(43,29,23,.14);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#2a1a16;--peach:#4a2a22;--ink:#fbe9d8;--card:#3a2620;--line:rgba(251,233,216,.2);color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#2a1a16;--peach:#4a2a22;--ink:#fbe9d8;--card:#3a2620;--line:rgba(251,233,216,.2);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:linear-gradient(160deg,var(--paper),var(--peach));color:var(--ink);font:500 16px/1.45 Outfit,system-ui,sans-serif;overflow:hidden}
+#app{width:min(100%,440px);height:100%;margin:0 auto;display:flex;flex-direction:column;padding:16px 20px 14px}
+#stage{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;overflow-y:auto;overflow-x:hidden;animation:in .5s ease both}
+@keyframes in{from{opacity:0;transform:translateY(14px)}}
+h1{font:800 clamp(26px,8vw,34px)/1.1 Fraunces,Georgia,serif;margin:10px 0 6px;letter-spacing:-.01em}
+.room{font-size:13px;opacity:.7;margin:6px 0 0}
+.sub{margin:4px 0 14px;max-width:32ch;opacity:.85}
+.hint{font-size:14px;opacity:.7;min-height:21px;margin:8px 0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.cta{border:0;border-radius:999px;padding:14px 26px;font-weight:600;color:#fff;background:linear-gradient(180deg,var(--amber),var(--coral));box-shadow:0 6px 0 #b8432d,0 12px 20px rgba(239,106,76,.3);margin-top:auto;width:100%;max-width:340px;transition:transform .1s,box-shadow .1s}
+.cta:active{transform:translateY(4px);box-shadow:0 2px 0 #b8432d}
+.cta[disabled]{opacity:.45;pointer-events:none}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font-size:14px}
+.dots{display:flex;justify-content:center;gap:8px;padding:12px 0 0}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--line);transition:.3s}
+.dots i.on{background:var(--coral);transform:scale(1.25)}
+.dots i.done{background:var(--teal)}
+/* intro */
+form{width:100%;display:grid;gap:12px;text-align:left;margin-top:6px}
+label{font-size:14px;font-weight:600;display:grid;gap:4px}
+input,textarea{font:inherit;color:inherit;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:11px 14px;width:100%}
+textarea{min-height:110px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* door */
+.doorwrap{width:230px;height:330px;margin:6px 0;border-radius:115px 115px 8px 8px;background:radial-gradient(circle at 50% 60%,#ffe9a8,#f5a43a 70%);padding:7px;box-shadow:0 18px 30px rgba(18,55,47,.35)}
+.door{position:relative;width:100%;height:100%;border-radius:110px 110px 4px 4px;background:linear-gradient(90deg,#0f3029,#1b4f43 50%,#0f3029);border:6px solid #0a211c;transform-origin:left center;transition:transform 1.1s cubic-bezier(.6,0,.2,1)}
+.door.open{transform:perspective(700px) rotateY(-78deg)}
+.door::before{content:"";position:absolute;inset:34px 26px 30px;border:3px solid rgba(255,255,255,.07);border-radius:80px 80px 4px 4px}
+.plaque{position:absolute;top:96px;left:50%;translate:-50% 0;rotate:-3deg;width:150px;background:#fff6e6;color:#2b1d17;font-size:12px;line-height:1.3;padding:8px 10px;border-radius:4px;box-shadow:0 3px 6px rgba(0,0,0,.35)}
+.knocker{position:absolute;left:50%;top:180px;translate:-50% 0;width:58px;height:58px;border-radius:50%;border:8px solid var(--brass);background:transparent;box-shadow:0 3px 5px rgba(0,0,0,.5),inset 0 0 4px rgba(0,0,0,.4);transform-origin:50% -20px}
+.knocker.k{animation:knock .25s}
+@keyframes knock{40%{transform:rotate(16deg)}}
+.pips{display:flex;gap:8px}.pips i{width:14px;height:14px;border-radius:50%;background:var(--line)}.pips i.on{background:var(--amber)}
+/* band */
+.bandbox{width:100%;height:230px;display:grid;place-items:center}
+.bandbox svg{width:100%;max-width:300px;overflow:visible}
+.wave{fill:none;stroke-width:7;stroke-linecap:round}
+.ring{fill:none;stroke-width:9;stroke-linecap:round;stroke-dasharray:380;stroke-dashoffset:380}
+.tied .ring{animation:draw 1.3s ease forwards}.tied .wave{opacity:0;transition:.3s}
+.tied .spin{animation:spin 9s linear infinite 1.3s}
+@keyframes draw{to{stroke-dashoffset:0}}@keyframes spin{to{rotate:360deg}}
+.spin{transform-origin:150px 115px}
+/* gallery */
+.frame{position:relative;width:100%;max-width:320px;aspect-ratio:3/4;padding:12px;background:linear-gradient(135deg,#e1b559,#9a6b1c 50%,#e1b559);border-radius:6px;box-shadow:0 14px 24px rgba(80,50,10,.35)}
+.pic{position:absolute;inset:12px;display:grid;place-items:center;font-size:90px;background-size:cover;background-position:center}
+.frame canvas{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);touch-action:none;cursor:crosshair}
+.plate{margin:12px 0;background:linear-gradient(#e6c377,#c8963a);color:#3a2706;padding:8px 18px;border-radius:4px;font-weight:600;width:100%;max-width:320px;font-size:14px}
+.nav{display:flex;gap:16px;align-items:center;margin:4px 0 12px}
+.nav button{width:46px;height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font-size:20px}
+.up{font-size:13px;text-decoration:underline;opacity:.8;cursor:pointer}
+/* puzzle */
+.board{position:relative;width:100%;max-width:310px;aspect-ratio:1;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);gap:3px;background:var(--card);padding:6px;border-radius:14px;border:1px solid var(--line)}
+.tile{border:0;border-radius:6px;background-size:300% 300%;padding:0}
+.tile.sel{outline:4px solid var(--amber);z-index:1}
+.board.win{box-shadow:0 0 0 4px var(--amber)}
+.stats{display:flex;gap:10px;margin:14px 0}
+/* letter */
+.env{position:relative;width:290px;height:190px;margin:14px 0;background:linear-gradient(#c58f55,#a8733c);border-radius:6px;box-shadow:0 14px 24px rgba(80,50,10,.3)}
+.env::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom right,transparent 49.5%,rgba(0,0,0,.12) 50%) left/50% 100% no-repeat,linear-gradient(to bottom left,transparent 49.5%,rgba(0,0,0,.12) 50%) right/50% 100% no-repeat;border-radius:6px}
+.flap{position:absolute;left:0;top:0;width:100%;height:100px;background:#b98348;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .6s,opacity .3s .5s}
+.seal{position:absolute;left:50%;top:84px;translate:-50% 0;width:54px;height:54px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#ff7a5c,#b8302a);box-shadow:0 3px 6px rgba(0,0,0,.4);font-size:24px;color:#fff;animation:beat 1.6s infinite}
+@keyframes beat{50%{scale:1.1}}
+.open .flap{transform:rotateX(180deg);opacity:0}.open .seal{display:none}
+.paper{width:100%;max-width:340px;background:#fffdf7;color:#2b1d17;border-radius:6px;padding:18px 20px;text-align:left;font:500 17px/1.6 Fraunces,Georgia,serif;white-space:pre-wrap;box-shadow:0 10px 20px rgba(80,50,10,.25);min-height:150px;background-image:repeating-linear-gradient(transparent 0 26px,rgba(18,55,47,.1) 26px 27px)}
+.paper b{display:block;text-align:right;margin-top:8px;font-style:italic}
+/* promises */
+.sheet{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;position:relative}
+.pr{display:flex;gap:12px;align-items:center;width:100%;border:0;background:rgba(18,55,47,.07);border-radius:10px;padding:11px 12px;margin:0 0 8px;text-align:left}
+.pr .bx{flex:none;width:24px;height:24px;border-radius:6px;border:2px solid var(--teal);display:grid;place-items:center;color:#fff;font-size:15px}
+.pr.on{background:var(--teal);color:#fff}.pr.on .bx{background:#2fbf9a;border-color:#2fbf9a}
+.sig{position:relative;margin-top:6px}
+.sig canvas{width:100%;height:110px;background:var(--paper);border:1.5px dashed var(--line);border-radius:10px;touch-action:none}
+.sig .chip{position:absolute;right:6px;bottom:6px;padding:3px 10px;font-size:13px}
+.stamp{position:absolute;right:14px;bottom:50px;rotate:-14deg;border:4px solid #c1272d;color:#c1272d;font:800 30px Fraunces,serif;padding:2px 14px;border-radius:6px;opacity:0;pointer-events:none}
+.stamp.go{animation:stamp .5s .1s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes stamp{from{scale:3;opacity:0}to{scale:1;opacity:.88}}
+.big{font-size:70px;margin:20px 0 0}
+@media (max-width:360px){#app{padding:12px 14px 10px}.frame{max-width:100%}.nav{gap:10px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="app"><div id="stage"></div><nav class="dots" id="dots" aria-label="Progress"></nav></div>
+<script>
+var S={from:"Sohil",to:"Simran",letter:"I know I’m terrible at saying this out loud, so I built a whole museum instead.\n\nThanks for every late-night call, every bad joke you laughed at anyway, and every time you showed up without being asked.\n\nYou’re my favourite exhibit.",promises:["Reply to my texts within one business week","Show up when it matters, without being asked","Laugh at my jokes, even the bad ones"]};
+var stage=document.getElementById("stage"),dots=document.getElementById("dots"),timers=[],cur=0;
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var later=function(f,t){timers.push(setTimeout(f,t))};
+var ROOMS=[intro,door,band,gallery,puzzle,letter,promises,end];
+function go(i){timers.forEach(clearTimeout);timers.forEach(clearInterval);timers=[];cur=i;
+  var s=stage.cloneNode(false);stage.replaceWith(s);stage=s;ROOMS[i](stage);
+  dots.innerHTML="";if(i>0&&i<7)for(var k=1;k<=6;k++){var d=document.createElement("i");d.className=k<i?"done":k==i?"on":"";dots.appendChild(d)}}
+function head(n,name,title,sub){return '<p class="room">Room '+n+' of 6: '+name+'</p><h1>'+title+'</h1>'+(sub?'<p class="sub">'+sub+'</p>':'')}
+function cta(c,text,fn,dis){var b=document.createElement("button");b.className="cta";b.textContent=text;b.disabled=!!dis;b.onclick=fn;c.appendChild(b);return b}
+
+function intro(c){
+  c.innerHTML='<h1>Build a museum for a friend</h1><p class="sub">Fill this in, then walk through it yourself or share your screen.</p><form id="f"><div class="two"><label>From<input name="from" value="'+esc(S.from)+'"></label><label>For<input name="to" value="'+esc(S.to)+'"></label></div><label>Your letter<textarea name="letter">'+esc(S.letter)+'</textarea></label></form>';
+  cta(c,"Open the museum",function(){var f=c.querySelector("form");S.from=f.from.value.trim()||"Sam";S.to=f.to.value.trim()||"Alex";S.letter=f.letter.value.trim()||S.letter;go(1)});
+}
+function door(c){
+  c.innerHTML='<h1>'+esc(S.from)+' built you a museum.</h1><p class="sub">Knock three times. That’s the rule.</p><div class="doorwrap"><div class="door"><div class="plaque">The Museum of '+esc(S.to)+'<br>one visitor only</div><button class="knocker" aria-label="Knock on the door"></button></div></div><div class="pips"><i></i><i></i><i></i></div><p class="hint">Tap the knocker</p>';
+  var n=0,k=c.querySelector(".knocker"),p=c.querySelectorAll(".pips i"),h=c.querySelector(".hint");
+  k.onclick=function(){if(n>=3)return;k.classList.remove("k");void k.offsetWidth;k.classList.add("k");p[n].classList.add("on");n++;
+    h.textContent=n<3?(n==2?"One more.":"Again."):"Come in.";
+    if(n==3){later(function(){c.querySelector(".door").classList.add("open")},350);later(function(){go(2)},1900)}}
+}
+function band(c){
+  c.innerHTML=head(1,"the entrance","First, your friendship band.","This one was made for you. Tap the button to tie it on.")+
+  '<div class="bandbox" id="bb"><svg viewBox="0 0 300 230"><path class="wave" stroke="#ef6a4c" d="M10 115 C 50 75 90 155 150 115 S 250 75 290 115"/><path class="wave" stroke="#12372f" d="M10 115 C 50 155 90 75 150 115 S 250 155 290 115"/><g class="spin"><circle class="ring" cx="150" cy="115" r="60" stroke="#ef6a4c"/><circle class="ring" cx="150" cy="115" r="60" stroke="#f5a43a" style="stroke-dasharray:14 12;animation-delay:.2s"/></g></svg></div><p class="hint" id="bh"></p>';
+  var b=cta(c,"Tie it on",function(){c.querySelector("#bb").classList.add("tied");c.querySelector("#bh").textContent="Tied. It doesn’t come off.";b.remove();cta(c,"Next room",function(){go(3)})});
+}
+function gallery(c){
+  // Your three uploaded photographs replace the original demo illustrations.
+  var P=[
+    ["images/photo-01.jpg","A peaceful moment by the lake"],
+    ["images/photo-02.jpg","A little moment out together"],
+    ["images/photo-03.jpg","A memory from the mountains"]
+  ],i=0;
+  c.innerHTML=head(2,"the gallery","Our photos","Every memory is covered. Rub your finger across to reveal it.")+'<div id="fr"></div><div class="plate" id="pl"></div><div class="nav"><button aria-label="Previous photo">←</button><span id="ct"></span><button aria-label="Next photo">→</button></div>';
+  var fr=c.querySelector("#fr"),frames=[];
+  P.forEach(function(p,k){
+    var f=document.createElement("div");f.className="frame";f.style.display=k?"none":"block";
+    var pic=document.createElement("div");pic.className="pic";
+    pic.style.backgroundImage='url("'+p[0]+'")';
+    var cv=document.createElement("canvas");cv.width=360;cv.height=480;
+    f.appendChild(pic);f.appendChild(cv);
+    var x=cv.getContext("2d");
+    x.fillStyle="#e7dcc6";x.fillRect(0,0,360,480);
+    x.fillStyle="rgba(120,90,40,.18)";for(var j=0;j<340;j++)x.fillRect(Math.random()*360,Math.random()*480,2,2);
+    x.fillStyle="#7a5d2a";x.font="600 18px Outfit,sans-serif";x.textAlign="center";x.fillText("Rub here",180,245);
+    var down=false;
+    function rub(e){if(!down)return;var r=cv.getBoundingClientRect();x.globalCompositeOperation="destination-out";x.beginPath();x.arc((e.clientX-r.left)*360/r.width,(e.clientY-r.top)*480/r.height,27,0,Math.PI*2);x.fill()}
+    cv.onpointerdown=function(e){down=true;cv.setPointerCapture(e.pointerId);rub(e)};
+    cv.onpointermove=rub;
+    cv.onpointerup=cv.onpointercancel=function(){down=false};
+    fr.appendChild(f);frames.push(f);
+  });
+  fr.style.cssText="width:100%;max-width:320px;margin-bottom:24px";
+  function show(n){
+    i=(n+P.length)%P.length;
+    frames.forEach(function(f,k){f.style.display=k==i?"block":"none"});
+    c.querySelector("#pl").textContent=P[i][1]+" · from the "+S.from+" collection";
+    c.querySelector("#ct").textContent=(i+1)+" / "+P.length;
+  }
+  var bs=c.querySelectorAll(".nav button");
+  bs[0].onclick=function(){show(i-1)};bs[1].onclick=function(){show(i+1)};show(0);
+  cta(c,"Keep walking",function(){go(4)});
+}
+function puzzle(c){
+  // Use the first real gallery photo as the puzzle image.
+  var IMG="images/photo-01.jpg";
+  c.innerHTML=head(3,"the restoration desk","This photo fell apart.","Put the pieces back in order. Tap two pieces to swap them.")+
+    '<div class="board" id="bd"></div>'+
+    '<div class="stats"><span class="chip" id="mv">Moves 0</span><span class="chip" id="tm">0:00</span><button class="chip" id="pk" type="button">Hold to peek</button></div>'+
+    '<p class="hint" id="ph">Swap two pieces at a time to rebuild the photo.</p>';
+
+  var bd=c.querySelector("#bd");
+  var movesEl=c.querySelector("#mv");
+  var timeEl=c.querySelector("#tm");
+  var hint=c.querySelector("#ph");
+  var peekButton=c.querySelector("#pk");
+  var ord=[0,1,2,3,4,5,6,7,8];
+  var selected=-1, moves=0, started=Date.now(), won=false, peekSaved=null;
+
+  // Fisher-Yates shuffle: unlike sort(Math.random), this is a proper shuffle.
+  for(var i=ord.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var temp=ord[i];ord[i]=ord[j];ord[j]=temp;
+  }
+  // Ensure the puzzle never starts already solved.
+  if(ord.every(function(v,i){return v===i;})){
+    var temp=ord[0];ord[0]=ord[1];ord[1]=temp;
+  }
+
+  var nextButton=cta(c,"Next room",function(){go(5)},true);
+
+  function draw(){
+    bd.innerHTML="";
+    ord.forEach(function(piece,position){
+      var tile=document.createElement("button");
+      tile.type="button";
+      tile.className="tile"+(position===selected?" sel":"");
+      tile.setAttribute("aria-label","Puzzle piece "+(position+1));
+      tile.style.backgroundImage='url("'+IMG+'")';
+      tile.style.backgroundSize="300% 300%";
+      tile.style.backgroundPosition=(piece%3)*50+"% "+Math.floor(piece/3)*50+"%";
+      tile.addEventListener("click",function(){swapAt(position);});
+      bd.appendChild(tile);
+    });
+  }
+
+  function swapAt(position){
+    if(won || peekSaved) return;
+
+    if(selected===-1){
+      selected=position;
+      hint.textContent="Now choose another piece to swap with.";
+      draw();
+      return;
+    }
+
+    if(selected!==position){
+      var temp=ord[selected];
+      ord[selected]=ord[position];
+      ord[position]=temp;
+      moves++;
+      movesEl.textContent="Moves "+moves;
+    }
+
+    selected=-1;
+    draw();
+
+    if(ord.every(function(piece,index){return piece===index;})){
+      won=true;
+      bd.classList.add("win");
+      var seconds=Math.floor((Date.now()-started)/1000);
+      var formatted=Math.floor(seconds/60)+":"+String(seconds%60).padStart(2,"0");
+      hint.textContent="You did it! Solved in "+moves+" moves and "+formatted+".";
+      nextButton.disabled=false;
+      peekButton.disabled=true;
+    }
+  }
+
+  function showPeek(){
+    if(won || peekSaved) return;
+    peekSaved=ord.slice();
+    ord=[0,1,2,3,4,5,6,7,8];
+    selected=-1;
+    draw();
+  }
+
+  function hidePeek(){
+    if(!peekSaved) return;
+    ord=peekSaved;
+    peekSaved=null;
+    draw();
+  }
+
+  peekButton.addEventListener("pointerdown",function(e){
+    e.preventDefault();
+    showPeek();
+  });
+  ["pointerup","pointercancel","pointerleave","lostpointercapture"].forEach(function(eventName){
+    peekButton.addEventListener(eventName,hidePeek);
+  });
+
+  var tick=setInterval(function(){
+    if(!won){
+      var seconds=Math.floor((Date.now()-started)/1000);
+      timeEl.textContent=Math.floor(seconds/60)+":"+String(seconds%60).padStart(2,"0");
+    }
+  },500);
+  timers.push(tick);
+  draw();
+}
+function letter(c){
+  c.innerHTML=head(4,"the reading room","A letter, sealed just for you.")+'<div class="env" id="ev"><div class="flap"></div><button class="seal" aria-label="Open the seal">♾</button></div><p class="hint">Tap the seal to open it</p>';
+  c.querySelector(".seal").onclick=function(){
+    c.innerHTML=head(4,"the reading room",esc(S.from)+" wrote you this.")+'<div class="paper" id="pp"></div>';
+    var p=c.querySelector("#pp"),i=0,txt=S.letter,tp=setInterval(function(){i+=2;p.textContent=txt.slice(0,i);if(i>=txt.length){clearInterval(tp);p.innerHTML=esc(txt)+"<b>"+esc(S.from)+"</b>";nx.disabled=false}},28);timers.push(tp);
+    var nx=cta(c,"One last room",function(){go(6)},true)}
+}
+function promises(c){
+  c.innerHTML=head(5,"the promises","Tick each promise, then sign.")+'<div class="sheet"><b style="font:800 20px Fraunces,serif">Our friendship rules</b><p class="hint" style="margin:2px 0 10px">Between '+esc(S.from)+' and '+esc(S.to)+'</p><div id="pl"></div><div class="sig"><canvas width="600" height="220"></canvas><span class="chip" id="cl" role="button" tabindex="0">Clear</span></div><div class="stamp" id="st">Renewed</div></div>';
+  var on=0,signed=false,total=S.promises.length,cv=c.querySelector("canvas"),x=cv.getContext("2d");
+  function chk(){go_.disabled=!(on==total&&signed)}
+  S.promises.forEach(function(t,i){var b=document.createElement("button");b.className="pr";b.innerHTML='<span class="bx"></span><span>'+esc(t)+'</span>';
+    b.onclick=function(){b.classList.toggle("on");b.firstChild.textContent=b.classList.contains("on")?"✓":"";on+=b.classList.contains("on")?1:-1;chk()};c.querySelector("#pl").appendChild(b)});
+  x.lineWidth=7;x.lineCap=x.lineJoin="round";x.strokeStyle="#25356b";var d=false;
+  function pos(e){var r=cv.getBoundingClientRect();return[(e.clientX-r.left)*600/r.width,(e.clientY-r.top)*220/r.height]}
+  cv.onpointerdown=function(e){d=true;cv.setPointerCapture(e.pointerId);var p=pos(e);x.beginPath();x.moveTo(p[0],p[1]);x.lineTo(p[0]+.1,p[1])};
+  cv.onpointermove=function(e){if(!d)return;var p=pos(e);x.lineTo(p[0],p[1]);x.stroke();signed=true;chk()};
+  cv.onpointerup=function(){d=false};
+  c.querySelector("#cl").onclick=function(){x.clearRect(0,0,600,220);signed=false;chk()};
+  var go_=cta(c,"Renew our friendship",function(){c.querySelector("#st").classList.add("go");go_.disabled=true;go_.textContent="Renewed";later(function(){go(7)},1900)},true);
+}
+function end(c){
+  c.innerHTML='<div class="big">🏛️</div><h1>The museum is closed for today.</h1><p class="sub">Every exhibit stays exactly as you left it. Come back whenever you want, '+esc(S.to)+'.</p>';
+  cta(c,"Walk through it again",function(){go(1)});
+}
+go(0);
+</script>
+</body>
+</html>
