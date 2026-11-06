@@ -113,7 +113,7 @@ function intro(c){
 function door(c){
   c.innerHTML='<h1>'+esc(S.from)+' built you a museum.</h1><p class="sub">Knock three times. That’s the rule.</p><div class="doorwrap"><div class="door"><div class="plaque">The Museum of '+esc(S.to)+'<br>one visitor only</div><button class="knocker" aria-label="Knock on the door"></button></div></div><div class="pips"><i></i><i></i><i></i></div><p class="hint">Tap the knocker</p>';
   var n=0,k=c.querySelector(".knocker"),p=c.querySelectorAll(".pips i"),h=c.querySelector(".hint");
-  k.onclick=function(){if(n>=3)return;k.classList.remove("k");void k.offsetWidth;k.classList.add("k");p[n].classList.add("on");n++;
+  c.querySelector(".door").onclick=function(){if(n>=3)return;k.classList.remove("k");void k.offsetWidth;k.classList.add("k");p[n].classList.add("on");n++;
     h.textContent=n<3?(n==2?"One more.":"Again."):"Come in.";
     if(n==3){later(function(){c.querySelector(".door").classList.add("open")},350);later(function(){go(2)},1900)}}
 }
