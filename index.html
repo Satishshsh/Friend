@@ -129,9 +129,9 @@ function band(c){
 function gallery(c){
   // Your three uploaded photographs replace the original demo illustrations.
   var P=[
-    ["images/photo-01.jpg","A peaceful moment by the lake"],
-    ["images/photo-02.jpg","A little moment out together"],
-    ["images/photo-03.jpg","A memory from the mountains"]
+    ["photo-01.jpg","A peaceful moment by the lake"],
+    ["photo-02.jpg","A little moment out together"],
+    ["photo-03.jpg","A memory from the mountains"]
   ],i=0;
   c.innerHTML=head(2,"the gallery","Our photos","Every memory is covered. Rub your finger across to reveal it.")+'<div id="fr"></div><div class="plate" id="pl"></div><div class="nav"><button aria-label="Previous photo">←</button><span id="ct"></span><button aria-label="Next photo">→</button></div>';
   var fr=c.querySelector("#fr"),frames=[];
@@ -165,7 +165,7 @@ function gallery(c){
 }
 function puzzle(c){
   // Use the first real gallery photo as the puzzle image.
-  var IMG="images/photo-01.jpg";
+  var IMG="photo-01.jpg";
   c.innerHTML=head(3,"the restoration desk","This photo fell apart.","Put the pieces back in order. Tap two pieces to swap them.")+
     '<div class="board" id="bd"></div>'+
     '<div class="stats"><span class="chip" id="mv">Moves 0</span><span class="chip" id="tm">0:00</span><button class="chip" id="pk" type="button">Hold to peek</button></div>'+
