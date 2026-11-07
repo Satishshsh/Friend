@@ -115,7 +115,7 @@ function door(c){
   var n=0,k=c.querySelector(".knocker"),p=c.querySelectorAll(".pips i"),h=c.querySelector(".hint");
   c.querySelector(".door").onclick=function(){if(n>=3)return;k.classList.remove("k");void k.offsetWidth;k.classList.add("k");p[n].classList.add("on");n++;
     h.textContent=n<3?(n==2?"One more.":"Again."):"Come in.";
-    if(n==3){later(function(){c.querySelector(".door").classList.add("open")},350);later(function(){go(2)},1900)}}
+    if(n==3){later(function(){c.querySelector(".door").classList.add("open")},350);later(function(){go(3)},1900)}}
 }
   function braid(p){var d="";for(var i=0;i<=120;i++){var t=i/120*Math.PI*2,r=45+9*Math.sin(6*t+p);d+=(i?"L":"M")+(150+r*Math.cos(t)).toFixed(1)+" "+(115+r*Math.sin(t)).toFixed(1)}return d+"Z"}
 function band(c){
