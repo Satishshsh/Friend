@@ -33,7 +33,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .dots i.on{background:var(--coral);transform:scale(1.25)}
 .dots i.done{background:var(--teal)}
 /* intro */
-
+form{width:100%;display:grid;gap:12px;text-align:left;margin-top:6px}
+label{font-size:14px;font-weight:600;display:grid;gap:4px}
+input,textarea{font:inherit;color:inherit;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:11px 14px;width:100%}
+textarea{min-height:110px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* door */
 .doorwrap{width:230px;height:330px;margin:6px 0;border-radius:115px 115px 8px 8px;background:radial-gradient(circle at 50% 60%,#ffe9a8,#f5a43a 70%);padding:7px;box-shadow:0 18px 30px rgba(18,55,47,.35)}
 .door{position:relative;width:100%;height:100%;border-radius:110px 110px 4px 4px;background:linear-gradient(90deg,#0f3029,#1b4f43 50%,#0f3029);border:6px solid #0a211c;transform-origin:left center;transition:transform 1.1s cubic-bezier(.6,0,.2,1)}
@@ -47,8 +51,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 /* band */
 .bandbox{width:100%;height:230px;display:grid;place-items:center}
 .bandbox svg{width:100%;max-width:300px;overflow:visible}
-.wave{fill:none;stroke-width:7;stroke-linecap:round;opacity:.5}
-.ring{fill:none;stroke-width:5;stroke-linecap:round;stroke-dasharray:380;stroke-dashoffset:380}
+.wave{fill:none;stroke-width:7;stroke-linecap:round}
+.ring{fill:none;stroke-width:9;stroke-linecap:round;stroke-dasharray:380;stroke-dashoffset:380}
 .tied .ring{animation:draw 1.3s ease forwards}.tied .wave{opacity:0;transition:.3s}
 .tied .spin{animation:spin 9s linear infinite 1.3s}
 @keyframes draw{to{stroke-dashoffset:0}}@keyframes spin{to{rotate:360deg}}
@@ -113,22 +117,21 @@ function intro(c){
 function door(c){
   c.innerHTML='<h1>'+esc(S.from)+' built you a museum.</h1><p class="sub">Knock three times. That’s the rule.</p><div class="doorwrap"><div class="door"><div class="plaque">The Museum of '+esc(S.to)+'<br>one visitor only</div><button class="knocker" aria-label="Knock on the door"></button></div></div><div class="pips"><i></i><i></i><i></i></div><p class="hint">Tap the knocker</p>';
   var n=0,k=c.querySelector(".knocker"),p=c.querySelectorAll(".pips i"),h=c.querySelector(".hint");
-  c.querySelector(".door").onclick=function(){if(n>=3)return;k.classList.remove("k");void k.offsetWidth;k.classList.add("k");p[n].classList.add("on");n++;
+  k.onclick=function(){if(n>=3)return;k.classList.remove("k");void k.offsetWidth;k.classList.add("k");p[n].classList.add("on");n++;
     h.textContent=n<3?(n==2?"One more.":"Again."):"Come in.";
-    if(n==3){later(function(){c.querySelector(".door").classList.add("open")},350);later(function(){go(3)},1900)}}
+    if(n==3){later(function(){c.querySelector(".door").classList.add("open")},350);later(function(){go(2)},1900)}}
 }
-  function braid(p){var d="";for(var i=0;i<=120;i++){var t=i/120*Math.PI*2,r=45+9*Math.sin(6*t+p);d+=(i?"L":"M")+(150+r*Math.cos(t)).toFixed(1)+" "+(115+r*Math.sin(t)).toFixed(1)}return d+"Z"}
 function band(c){
   c.innerHTML=head(1,"the entrance","First, your friendship band.","This one was made for you. Tap the button to tie it on.")+
-  '<div class="bandbox" id="bb"><svg viewBox="0 0 300 230"><path class="wave" stroke="#ef6a4c" d="M10 115 C 50 75 90 155 150 115 S 250 75 290 115"/><path class="wave" stroke="#ef6a4c" d="M10 115 C 50 75 90 155 150 115 S 250 75 290 115"/><path class="wave" stroke="#ffffff" d="M10 115 C 50 95 90 135 150 115 S 250 95 290 115"/><path class="wave" stroke="#12372f" d="M10 115 C 50 155 90 75 150 115 S 250 155 290 115"/><g class="spin"><path class="ring" pathLength="380" stroke="#ef6a4c" d="'+braid(0)+'"/><path class="ring" pathLength="380" stroke="#ffffff" d="'+braid(2.094)+'" style="animation-delay:.2s"/><path class="ring" pathLength="380" stroke="#2fbf9a" d="'+braid(4.189)+'" style="animation-delay:.4s"/></g></svg></div><p class="hint" id="bh"></p>';;
+  '<div class="bandbox" id="bb"><svg viewBox="0 0 300 230"><path class="wave" stroke="#ef6a4c" d="M10 115 C 50 75 90 155 150 115 S 250 75 290 115"/><path class="wave" stroke="#12372f" d="M10 115 C 50 155 90 75 150 115 S 250 155 290 115"/><g class="spin"><circle class="ring" cx="150" cy="115" r="60" stroke="#ef6a4c"/><circle class="ring" cx="150" cy="115" r="60" stroke="#f5a43a" style="stroke-dasharray:14 12;animation-delay:.2s"/></g></svg></div><p class="hint" id="bh"></p>';
   var b=cta(c,"Tie it on",function(){c.querySelector("#bb").classList.add("tied");c.querySelector("#bh").textContent="Tied. It doesn’t come off.";b.remove();cta(c,"Next room",function(){go(3)})});
 }
 function gallery(c){
   // Your three uploaded photographs replace the original demo illustrations.
   var P=[
-    ["photo-01.jpg","A peaceful moment by the lake"],
-    ["photo-02.jpg","A little moment out together"],
-    ["photo-03.jpg","A memory from the mountains"]
+    ["images/photo-01.jpg","A peaceful moment by the lake"],
+    ["images/photo-02.jpg","A little moment out together"],
+    ["images/photo-03.jpg","A memory from the mountains"]
   ],i=0;
   c.innerHTML=head(2,"the gallery","Our photos","Every memory is covered. Rub your finger across to reveal it.")+'<div id="fr"></div><div class="plate" id="pl"></div><div class="nav"><button aria-label="Previous photo">←</button><span id="ct"></span><button aria-label="Next photo">→</button></div>';
   var fr=c.querySelector("#fr"),frames=[];
@@ -162,7 +165,7 @@ function gallery(c){
 }
 function puzzle(c){
   // Use the first real gallery photo as the puzzle image.
-  var IMG="photo-01.jpg";
+  var IMG="images/photo-01.jpg";
   c.innerHTML=head(3,"the restoration desk","This photo fell apart.","Put the pieces back in order. Tap two pieces to swap them.")+
     '<div class="board" id="bd"></div>'+
     '<div class="stats"><span class="chip" id="mv">Moves 0</span><span class="chip" id="tm">0:00</span><button class="chip" id="pk" type="button">Hold to peek</button></div>'+
@@ -292,7 +295,7 @@ function end(c){
   c.innerHTML='<div class="big">🏛️</div><h1>The museum is closed for today.</h1><p class="sub">Every exhibit stays exactly as you left it. Come back whenever you want, '+esc(S.to)+'.</p>';
   cta(c,"Walk through it again",function(){go(1)});
 }
-go(1);
+go(0);
 </script>
 </body>
 </html>
